@@ -1,0 +1,136 @@
+numero uno
+
+alainzhang@Mac adder % cat test/add.snek
+(sub1 (sub1 (add1 73)))
+alainzhang@Mac adder % make test/add.s
+cargo run --target x86_64-apple-darwin -- test/add.snek test/add.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running `target/x86_64-apple-darwin/debug/adder test/add.snek test/add.s`
+jit result is 72
+alainzhang@Mac adder % cat test/add.s
+
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 73
+add rax, 1
+sub rax, 1
+sub rax, 1
+  ret
+alainzhang@Mac adder % ./test/add.run 
+72
+
+numero dos
+
+=== Source (.snek) ===
+cat test/neg.snek
+(neg1 -1)
+
+
+=== Compile to .s ===
+make test/neg.s
+make: `test/neg.s' is up to date.
+
+=== Generated assembly (.s) ===
+cat test/neg.s
+
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, -1
+neg rax
+  ret
+
+=== Build and run executable ===
+make test/neg.run
+make: `test/neg.run' is up to date.
+./test/neg.run
+1
+
+numero tres 
+
+=== Source (.snek) ===
+cat test/neg3.snek
+(neg1 (sub1 (sub1 (add1 73))))
+
+=== Compile to .s ===
+make test/neg3.s
+make: `test/neg3.s' is up to date.
+
+=== Generated assembly (.s) ===
+cat test/neg3.s
+
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 73
+add rax, 1
+sub rax, 1
+sub rax, 1
+neg rax
+  ret
+
+=== Build and run executable ===
+make test/neg3.run
+make: `test/neg3.run' is up to date.
+./test/neg3.run
+-72
+
+numero quatro
+
+=== Source (.snek) ===
+cat test/neg2.snek
+(sub1 (sub1 (add1 (neg1 73))))
+
+=== Compile to .s ===
+make test/neg2.s
+make: `test/neg2.s' is up to date.
+
+=== Generated assembly (.s) ===
+cat test/neg2.s
+
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 73
+neg rax
+add rax, 1
+sub rax, 1
+sub rax, 1
+  ret
+
+=== Build and run executable ===
+make test/neg2.run
+make: `test/neg2.run' is up to date.
+./test/neg2.run
+-74
+
+numero cinco
+
+=== Source (.snek) ===
+cat test/neg4.snek
+(neg1 (neg1 (sub1 (sub1 (add1 73)))))
+
+=== Compile to .s ===
+make test/neg4.s
+make: `test/neg4.s' is up to date.
+
+=== Generated assembly (.s) ===
+cat test/neg4.s
+
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 73
+add rax, 1
+sub rax, 1
+sub rax, 1
+neg rax
+neg rax
+  ret
+
+=== Build and run executable ===
+make test/neg4.run
+make: `test/neg4.run' is up to date.
+./test/neg4.run
+72

@@ -92,7 +92,7 @@ our_code_starts_here:
     let buf = ops.finalize().unwrap();
     let jitted_fn: extern "C" fn() -> i64 = unsafe { mem::transmute(buf.ptr(start)) };
     let result_val = jitted_fn();
-    println!("{}", result_val);
+    println!("jit result is {}", result_val);
 
     Ok(())
 }
